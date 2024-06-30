@@ -34,6 +34,15 @@ const getNotes = () =>
     headers: {
       'Content-Type': 'application/json',
     },
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok ' + response.statusText);
+    }
+    return response.json();
+  })
+  .catch(error => {
+    console.error('Error fetching notes:', error);
   });
 
 const saveNewNote = (note) =>
@@ -43,6 +52,15 @@ const saveNewNote = (note) =>
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(note),
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok ' + response.statusText);
+    }
+    return response.json();
+  })
+  .catch(error => {
+    console.error('Error saving note:', error);
   });
 
 const deleteNote = (id) =>
@@ -51,6 +69,15 @@ const deleteNote = (id) =>
     headers: {
       'Content-Type': 'application/json',
     },
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok ' + response.statusText);
+    }
+    return response.json();
+  })
+  .catch(error => {
+    console.error('Error deleting note:', error);
   });
 
 const renderActiveNote = () => {
@@ -140,7 +167,14 @@ const handleRenderBtns = () => {
 
 // Render the list of note titles
 const renderNoteList = async (notes) => {
-  let jsonNotes = await notes.json();
+  let jsonNotes;
+  try {
+    jsonNotes = await notes;
+  } catch (error) {
+    console.error('Error parsing JSON:', error);
+    return;
+  }
+  
   if (window.location.pathname === '/notes') {
     noteList.forEach((el) => (el.innerHTML = ''));
   }
