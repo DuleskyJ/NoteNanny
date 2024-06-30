@@ -28,57 +28,59 @@ const hide = (elem) => {
 // activeNote is used to keep track of the note in the textarea
 let activeNote = {};
 
-const getNotes = () =>
-  fetch('/api/notes', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-  .then(response => {
+const getNotes = async () => {
+  try {
+    const response = await fetch('/api/notes', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
     if (!response.ok) {
-      throw new Error('Network response was not ok ' + response.statusText);
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
-    return response.json();
-  })
-  .catch(error => {
+    const notes = await response.json();
+    return notes;
+  } catch (error) {
     console.error('Error fetching notes:', error);
-  });
+    return [];
+  }
+};
 
-const saveNewNote = (note) =>
-  fetch('/api/notes', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(note),
-  })
-  .then(response => {
+const saveNewNote = async (note) => {
+  try {
+    const response = await fetch('/api/notes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(note),
+    });
     if (!response.ok) {
-      throw new Error('Network response was not ok ' + response.statusText);
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
-    return response.json();
-  })
-  .catch(error => {
+    const newNote = await response.json();
+    return newNote;
+  } catch (error) {
     console.error('Error saving note:', error);
-  });
+  }
+};
 
-const deleteNote = (id) =>
-  fetch(`/api/notes/${id}`, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-  .then(response => {
+const deleteNote = async (id) => {
+  try {
+    const response = await fetch(`/api/notes/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
     if (!response.ok) {
-      throw new Error('Network response was not ok ' + response.statusText);
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
-    return response.json();
-  })
-  .catch(error => {
+  } catch (error) {
     console.error('Error deleting note:', error);
-  });
+  }
+};
 
 const renderActiveNote = () => {
   hide(saveNoteBtn);
@@ -99,16 +101,15 @@ const renderActiveNote = () => {
   }
 };
 
-const handleNoteSave = () => {
+const handleNoteSave = async () => {
   const newNote = {
     title: noteTitle.value,
     text: noteText.value,
   };
-  saveNewNote(newNote).then(() => {
-    getAndRenderNotes();
-    renderActiveNote();
-    showSaveSuccessMessage(); // Add this line
-  });
+  await saveNewNote(newNote);
+  getAndRenderNotes();
+  renderActiveNote();
+  showSaveSuccessMessage();
 };
 
 const showSaveSuccessMessage = () => {
@@ -122,7 +123,7 @@ const showSaveSuccessMessage = () => {
 };
 
 // Delete the clicked note
-const handleNoteDelete = (e) => {
+const handleNoteDelete = async (e) => {
   // Prevents the click listener for the list from being called when the button inside of it is clicked
   e.stopPropagation();
 
@@ -133,10 +134,9 @@ const handleNoteDelete = (e) => {
     activeNote = {};
   }
 
-  deleteNote(noteId).then(() => {
-    getAndRenderNotes();
-    renderActiveNote();
-  });
+  await deleteNote(noteId);
+  getAndRenderNotes();
+  renderActiveNote();
 };
 
 // Sets the activeNote and displays it
@@ -174,7 +174,7 @@ const renderNoteList = async (notes) => {
     console.error('Error parsing JSON:', error);
     return;
   }
-  
+
   if (window.location.pathname === '/notes') {
     noteList.forEach((el) => (el.innerHTML = ''));
   }
@@ -227,7 +227,10 @@ const renderNoteList = async (notes) => {
 };
 
 // Gets notes from the db and renders them to the sidebar
-const getAndRenderNotes = () => getNotes().then(renderNoteList);
+const getAndRenderNotes = async () => {
+  const notes = await getNotes();
+  renderNoteList(notes);
+};
 
 if (window.location.pathname === '/notes') {
   saveNoteBtn.addEventListener('click', handleNoteSave);

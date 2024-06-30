@@ -13,15 +13,6 @@ app.use(express.urlencoded({ extended: true }));
 // Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'Develop/public')));
 
-// HTML Routes
-app.get('/notes', (req, res) => {
-  res.sendFile(path.join(__dirname, 'Develop/public/notes.html'));
-});
-
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'Develop/public/index.html'));
-});
-
 // API Routes
 app.get('/api/notes', (req, res) => {
   fs.readFile(path.join(__dirname, 'Develop/db/db.json'), 'utf8', (err, data) => {
@@ -85,6 +76,15 @@ app.delete('/api/notes/:id', (req, res) => {
       res.status(500).send('An error occurred while parsing the notes');
     }
   });
+});
+
+// HTML Routes
+app.get('/notes', (req, res) => {
+  res.sendFile(path.join(__dirname, 'Develop/public/notes.html'));
+});
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'Develop/public/index.html'));
 });
 
 // Start the server
