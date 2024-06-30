@@ -29,7 +29,13 @@ app.get('/api/notes', (req, res) => {
       console.error('Error reading notes:', err);
       return res.status(500).send('An error occurred while reading the notes');
     }
-    res.json(JSON.parse(data));
+    try {
+      const notes = JSON.parse(data);
+      res.json(notes);
+    } catch (parseErr) {
+      console.error('Error parsing JSON:', parseErr);
+      res.status(500).send('An error occurred while parsing the notes');
+    }
   });
 });
 
@@ -40,15 +46,20 @@ app.post('/api/notes', (req, res) => {
       console.error('Error reading notes:', err);
       return res.status(500).send('An error occurred while reading the notes');
     }
-    const notes = JSON.parse(data);
-    notes.push(newNote);
-    fs.writeFile(path.join(__dirname, 'Develop/db/db.json'), JSON.stringify(notes), (err) => {
-      if (err) {
-        console.error('Error saving note:', err);
-        return res.status(500).send('An error occurred while saving the note');
-      }
-      res.json(newNote);
-    });
+    try {
+      const notes = JSON.parse(data);
+      notes.push(newNote);
+      fs.writeFile(path.join(__dirname, 'Develop/db/db.json'), JSON.stringify(notes), (err) => {
+        if (err) {
+          console.error('Error saving note:', err);
+          return res.status(500).send('An error occurred while saving the note');
+        }
+        res.json(newNote);
+      });
+    } catch (parseErr) {
+      console.error('Error parsing JSON:', parseErr);
+      res.status(500).send('An error occurred while parsing the notes');
+    }
   });
 });
 
@@ -59,15 +70,20 @@ app.delete('/api/notes/:id', (req, res) => {
       console.error('Error reading notes:', err);
       return res.status(500).send('An error occurred while reading the notes');
     }
-    let notes = JSON.parse(data);
-    notes = notes.filter(note => note.id !== noteId);
-    fs.writeFile(path.join(__dirname, 'Develop/db/db.json'), JSON.stringify(notes), (err) => {
-      if (err) {
-        console.error('Error deleting note:', err);
-        return res.status(500).send('An error occurred while deleting the note');
-      }
-      res.json({ ok: true });
-    });
+    try {
+      let notes = JSON.parse(data);
+      notes = notes.filter(note => note.id !== noteId);
+      fs.writeFile(path.join(__dirname, 'Develop/db/db.json'), JSON.stringify(notes), (err) => {
+        if (err) {
+          console.error('Error deleting note:', err);
+          return res.status(500).send('An error occurred while deleting the note');
+        }
+        res.json({ ok: true });
+      });
+    } catch (parseErr) {
+      console.error('Error parsing JSON:', parseErr);
+      res.status(500).send('An error occurred while parsing the notes');
+    }
   });
 });
 
