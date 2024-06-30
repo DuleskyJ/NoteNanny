@@ -73,3 +73,28 @@ Open a pull request.
 ## License
 This project is licensed under the MIT License. 
 
+## Development Process
+
+I started by setting up the initial Express.js server and creating the necessary API routes. The following steps were taken:
+
+1. Set up the initial Express server and tested the endpoints.
+2. Created GET and POST routes to handle fetching and saving notes.
+3. Implemented functionality to delete notes as an additional feature.
+4. Debugged and resolved issues related to file paths and JSON handling.
+5. Deployed the application to Heroku and verified its functionality.
+
+## Challenges and Solutions
+
+During the development of this project, I encountered these challenges:
+
+1. **File Path Issues:** Initially, there were issues with incorrect file paths which resulted in errors. This was resolved by verifying and updating the file paths to match the project structure.
+2. **JSON Handling:** There were some errors related to JSON parsing which were fixed by ensuring proper formatting and handling of JSON data.
+3. **Heroku Deployment:** Faced challenges with deploying the application to Heroku, particularly with environment configurations. These were resolved by carefully following the Heroku documentation and ensuring all necessary configurations were set.
+
+## Credit
+
+This project was developed with the help of the following resources:
+
+- [Express.js Documentation](https://expressjs.com/)
+- [Heroku Documentation](https://devcenter.heroku.com/)
+- [Stack Overflow](https://stackoverflow.com/) 
