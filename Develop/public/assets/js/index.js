@@ -32,25 +32,25 @@ const getNotes = () =>
   fetch('/api/notes', {
     method: 'GET',
     headers: {
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   });
 
-const saveNote = (note) =>
+const saveNewNote = (note) =>
   fetch('/api/notes', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(note)
+    body: JSON.stringify(note),
   });
 
 const deleteNote = (id) =>
   fetch(`/api/notes/${id}`, {
     method: 'DELETE',
     headers: {
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   });
 
 const renderActiveNote = () => {
@@ -75,12 +75,23 @@ const renderActiveNote = () => {
 const handleNoteSave = () => {
   const newNote = {
     title: noteTitle.value,
-    text: noteText.value
+    text: noteText.value,
   };
-  saveNote(newNote).then(() => {
+  saveNewNote(newNote).then(() => {
     getAndRenderNotes();
     renderActiveNote();
+    showSaveSuccessMessage(); // Add this line
   });
+};
+
+const showSaveSuccessMessage = () => {
+  const messageDiv = document.createElement('div');
+  messageDiv.className = 'save-success';
+  messageDiv.innerText = 'Note saved successfully!';
+  document.body.appendChild(messageDiv);
+  setTimeout(() => {
+    document.body.removeChild(messageDiv);
+  }, 3000);
 };
 
 // Delete the clicked note
@@ -108,7 +119,7 @@ const handleNoteView = (e) => {
   renderActiveNote();
 };
 
-// Sets the activeNote to and empty object and allows the user to enter a new note
+// Sets the activeNote to an empty object and allows the user to enter a new note
 const handleNewNoteView = (e) => {
   activeNote = {};
   show(clearBtn);
