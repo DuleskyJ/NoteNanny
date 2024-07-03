@@ -7,7 +7,6 @@ The Note Nanny is a note-taking application built using Express.js that allows u
 ## Table of Contents
 
 - [Installation](#installation)
-- [Usage](#usage)
 - [Screenshots](#screenshots)
 - [Testing](#testing)
 - [Deployment](#deployment)
@@ -32,8 +31,9 @@ Click on "Get Started" to navigate to the notes page.
 Enter a note title and text, then click the "Save" button to save the note.
 View saved notes by clicking on the note titles in the left-hand column.
 Delete notes by clicking on the trash can icon next to the note title.
-Screenshots
 
+## Screenshots
+![Screenshot (47)](https://github.com/DuleskyJ/NoteNanny/assets/153566037/b98a992c-a09d-40d8-8a38-300e8d67d872)
 
 ## Testing
 To run the tests, use the following command:
